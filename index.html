@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sample Calculator(JavaScript)</title>
+    <link rel="stylesheet" href="index.css">
+    
+</head>
+<body>
+    
+<div id="cont" class="container">
+    <div class="digitgrid">
+        <input type="text" name="display" id="finaldisplay"></input>
+        <input type="text" name="display" id="finaldisplay2"></input>
+        <input type="text" name="display" id="display" value=""></input>
+        <input type="text" name="display" id="display3" value=""></input>
+       
+        <button class="reset" id="AC">AC</button>
+        <button class="backspace" id="delete">DEL</button>
+
+        <button class="digit" id="1">1</button>
+        <button class="digit" id="2">2</button>
+        <button class="digit" id="3">3</button>
+        <button class="operator" id="/">/</button>
+        <button class="digit" id="4">4</button>
+        <button class="digit" id="5">5</button>
+        <button class="digit" id="6">6</button>
+        <button class="operator" id="*">*</button>
+        <button class="digit" id="7">7</button>
+        
+        <button class="digit" id="8">8</button>
+        <button class="digit" id="9">9</button>
+        <button class="operator" id="+">+</button>
+        <button class="digit" id="0">0</button>
+        <button class="dec" id=".">.</button>
+       
+        
+        <!-- <button class="operator" id="*">*</button> -->
+        <button class="operator" id="">=</button>
+        <button class="operator" id="-">-</button>
+        
+    </div>
+</div>
+    <script>
+        const display = document.getElementById('display')
+        const display3 = document.getElementById('display3')
+        const finaldisplay = document.getElementById('finaldisplay')
+        const finaldisplay2 = document.getElementById('finaldisplay2')
+        const digits = document.querySelectorAll('.digit')
+        const operators = document.querySelectorAll('.operator')
+        const clearbutton = document.querySelector('.reset')
+        const decbutton = document.querySelector('.dec')
+        const delbutton = document.querySelector('.backspace')
+        const griddisplay = document.querySelector('.digitgrid')
+
+        let operand, myoperand, firstoperand, latteroperand, finaloperand, currentoperator, lastoperator, result;
+        let str_digit = "", currentdigit = "", optionval, decpoint=""
+        let isreset, zeroreplace;
+        currentoperator = currentoperator ?? ""
+        myoperand??=""
+        finaloperand??=""
+        optionval??=0
+        var mydigit
+        var finalresult
+        mydigit??=""
+        let decstate=false, ansclicked, digitclicked, seconddisplay, delstring, newresult
+
+        finaldisplay.style.display = 'none'
+        display.style.display = 'none'
+
+        clearbutton.addEventListener('click', (e)=>{
+            cleardisplay()
+        } )
+
+        function randomColor(){
+            let ink = "cd1234f"
+            let mycolor = "#"
+            for (let i=0; i<6; i++)
+            mycolor += ink[Math.floor(Math.random()*i)]
+            return mycolor
+        }
+
+        function changeColor(){
+            const mybody = document.getElementById('cont')
+            mybody.style.backgroundColor =  randomColor()//.toString()
+            console.log(randomColor())
+        }
+
+        digits.forEach(button=>button.addEventListener('click', (e)=>{
+            changeColor()
+            operand = e.target.id;
+            str_digit = Number(operand)
+            finaloperand += Number(str_digit)
+            display.disabled = 'true'
+            display3.disabled = 'true'
+            
+            { mydigit += (Number(str_digit))}  
+            currentdigit += Number(str_digit)   
+
+            // if (ansclicked==true)//Answer button has been clicked
+            //      {seconddisplay = ""; firstoperand=""; ansclicked = false} 
+
+            // THIS  IS TO ALLOW THE DISPLAY OF DECIMAL VALUES
+            
+            if(decstate==false)
+                {display.value = Number(mydigit)
+                display3.value = (parseFloat(mydigit).toLocaleString('en', {maximumFractionDigits:16}))}//.toLocaleString('en', {maximumFractionDigits:0})}//Number(currentdigit)
+            else
+                {display.value = (mydigit)
+                display3.value = getdisplay(mydigit)}//parseFloat(currentdigit).toLocaleString('en', {maximumFractionDigits:16})}//(parseFloat(mydigit).toLocaleString('en', {maximumFractionDigits:6})) }//.toLocaleString('en', {maximumFractionDigits:0})}
+
+              /////////////////////////////////////////////////////////  
+
+            
+            firstoperand = (display.value.toString())//.toLocaleString('en', {maximumFractionDigits:0})
+            digitclicked=true
+            //display3.value = (parseFloat(mydigit).toLocaleString('en', {maximumFractionDigits:0}))
+            
+        }))
+
+        function getdisplay(displaytext){
+            const intdigit = parseFloat(displaytext.split('.')[0])
+            const decdigit = displaytext.split('.')[1]
+            //const strdigit = displaytext[0].toString()
+            let numberdisplay
+                if (isNaN(intdigit)){
+                numberdisplay = ''}
+                else {
+                numberdisplay = intdigit.toLocaleString('en', {maximumFractionDigits:0})
+                }
+                if (decdigit != null){
+                    return (numberdisplay + "." +decdigit)
+                } else {
+                    return numberdisplay
+                }
+        }
+        
+
+        decbutton.addEventListener('click', (e)=>{
+            //mydigit = converttodecimal(mydigit.toString(), e.target.id)
+            if (!(mydigit.includes(".")))
+                {display.value = Number(mydigit) + e.target.id
+                mydigit = display.value.toString()
+                //display3.value += e.target.id
+                currentdigit = mydigit//display3.value
+                display3.value = getdisplay(display.value)
+                
+                //display3.value = (display3.value).toLocaleString('en', {maximumFractionDigits:16})//, {maximumFractionDigits:5})
+                }
+            else
+                {return}
+
+                decstate = true
+        })
+
+        // THIS FUNCTION MIGHT BE USEFUL LATER
+
+        // function converttodecimal(optionval, decpoint){
+        //     if (!(optionval.includes(".")))
+        //         {if (optionval.length<=0)
+        //             {optionval += "0" + decpoint.toString()}
+        //         else
+        //             {optionval += decpoint.toString()+"0";}
+        //         }
+        //     else
+        //         {return optionval}
+
+        //         return (optionval.toString())
+        // }
+
+        function cleardisplay(){
+            finaldisplay.value = "";
+            display.value = "";
+            finaldisplay2.value = "";
+            display3.value = ""//Number(roundup(display.value, 3))//"";
+            mydigit = ""
+            str_digit=""
+            currentdigit=""
+            latteroperand=""
+            firstoperand = "";
+            finalresult=""
+            newresult=""
+        }
+
+        //  USE DISPLAY VALUE NOT DISPLAY3.VALUE FOR THIS FUNCTION FOR DEFINITIVE REASONS
+
+        // function roundup(currentvalue, decimalplaces){
+        //     let roundvalue = parseFloat(currentvalue).toLocaleString('en',{maximumFractionDigits:Number(decimalplaces)})
+        //     const decimalnumber = roundvalue.toString().split('.')[1]
+        //     const digitnumber = currentvalue.toString().split('.')[0]
+            
+        //     return (parseFloat(digitnumber).toLocaleString('en', {maximumFractionDigits:0}) + "." + decimalnumber).toString()
+        // }
+
+        
+        operators.forEach(button=>button.addEventListener('click', (e)=>{
+            currentoperator = e.target.id
+            latteroperand = finalresult
+
+            appendoperator(currentoperator)
+            
+            if ((currentoperator== "+")||(currentoperator== "-"))
+             {firstoperand=Number(""); lastoperator = currentoperator}
+            else if ((currentoperator== "*")||(currentoperator== "/"))
+             {firstoperand=Number("1"); lastoperator = currentoperator}
+            else
+             {firstoperand=(""); latteroperand=""; 
+            ansclicked = true; seconddisplay=""; finaldisplay2.value = "Ans: " + finaldisplay2.value}
+            
+            //display.value = ""
+            display.value =(finalresult)
+            display3.value = getdisplay(display.value)
+            
+            
+            newresult = finaldisplay.value.toString()
+
+            console.log(finaldisplay.value)
+            decstate=false
+
+            mydigit = ""
+            //currentoperator = ""
+            //firstoperand=Number("")
+            str_digit=""
+            currentdigit = ""
+            //newresult=""
+            isreset = true
+            //result = 0
+            //finalresult = ""
+            seconddisplay=""
+            
+            //cleardisplay()
+        }))
+
+        function compute(firstvalue, secondvalue){
+            const computeval = eval(firstvalue.toString()+ secondvalue.toString())
+            return computeval
+        }
+
+        function backspace(delstring){
+            const deletedstring = delstring.toString().substring(delstring.toString().length-1, -1)
+            return deletedstring
+        }
+
+        delbutton.addEventListener('click', (e)=>{
+            display.value = Number(backspace(mydigit.toString()))
+            mydigit = Number(display.value).toString()
+            firstoperand = Number(display.value).toString()
+            currentdigit = mydigit
+            //display.value = parseFloat(display.value).toLocaleString('en', {maximumFractionDigits:16})
+        
+            display3.value = getdisplay(display.value)
+            console.log(e)
+        })
+
+        function appendoperator(activeoperator){
+            if ((ansclicked==true))
+                {//finaldisplay.value = finalresult;
+                seconddisplay = (display.value)
+                firstoperand=""
+                
+                finaldisplay.value = "("+ (seconddisplay)+ ")" + "" + activeoperator + " ";
+                finaldisplay2.value = "Ans: " + "("+ (seconddisplay)+ ")" + "" + activeoperator + " ";
+                ansclicked=false; digitclicked=false}
+        else
+            seconddisplay = newresult??=""//(finaldisplay.value)
+            {finalresult = (eval(seconddisplay + firstoperand))
+            //finaldisplay.value = ""
+            finaldisplay.value = "("+ ((eval(seconddisplay + firstoperand))) + ")" + " " + activeoperator + " ";
+            finaldisplay2.value = "("+ parseFloat((eval(seconddisplay + firstoperand))).toLocaleString('en', {maximumFractionDigits:16}) + ")" + " " + activeoperator + " ";}
+            
+            if ((activeoperator=="+") || (activeoperator=="-"))
+                {result = (eval((finaldisplay.value).toString()+0)); lastoperator = activeoperator}
+            else if ((activeoperator=="*") || (activeoperator=="/"))
+                {result = (eval((finaldisplay.value).toString()+1)); lastoperator = activeoperator}
+            else
+                {result = eval(finalresult.toString()); ansclicked = true }
+                //finaldisplay.value = (latteroperand.toString() + lastoperator.toString() + firstoperand.toString()
+                //+ "=" + result.toString())} //UNCOMMENT THIS TO SEE THE LAST CALCULATION
+
+            return result
+            //firstoperand = 0
+
+        }
+
+        // TESTTING PURPOSES/ LEARNING PURPOSES
+
+        // function createbuttons(){
+        //     for(let i=0; i<8; i++){
+        //         const btn = document.createElement('textarea')//('button')
+        //         btn.setAttribute('class', 'custom')
+        //         btn.setAttribute('id', i)
+        //         btn.setAttribute('onclick', 'this.innerHTML += '+i)
+        //         btn.addEventListener('click', (e)=>{
+        //             display.value = display.value.concat(Number(e.target.id).toString())
+        //             let cardarray = []
+        //             cardarray.push(display.value)//(i)
+        //             console.log(cardarray)
+        //         })
+        //         //btn.innerHTML = i
+                
+        //         griddisplay.appendChild(btn)
+
+        //     }
+        // }
+
+        // createbuttons()
+    </script>
+</body>
+</html>
